@@ -27,38 +27,22 @@ SRCS_PATH = ./srcs
 SERVER_FILES = server.c
 CLIENT_FILES = client.c
 SERVER_SRCS = $(addprefix $(addsuffix /, $(SRCS_PATH)), $(SERVER_FILES))
-SERVER_SRCS_BONUS = $(addprefix $(addsuffix /, $(SRCS_PATH)), $(patsubst %.c, %_bonus.c, $(SERVER_FILES)))
 CLIENT_SRCS = $(addprefix $(addsuffix /, $(SRCS_PATH)), $(CLIENT_FILES))
-CLIENT_SRCS_BONUS = $(addprefix $(addsuffix /, $(SRCS_PATH)), $(patsubst %.c, %_bonus.c, $(CLIENT_FILES)))
 SERVER_OBJS = $(SERVER_SRCS:.c=.o)
-SERVER_BONUS_OBJS = $(SERVER_SRCS_BONUS:.c=.o)
 CLIENT_OBJS = $(CLIENT_SRCS:.c=.o)
-CLIENT_BONUS_OBJS = $(CLIENT_SRCS_BONUS:.c=.o)
-
-
-ifdef WITH_BONUS
-	SER_OBJS = $(SERVER_BONUS_OBJS)
-	CLI_OBJS = $(CLIENT_BONUS_OBJS)
-else
-	SER_OBJS = $(SERVER_OBJS)
-	CLI_OBJS = $(CLIENT_OBJS)
-endif
 
 all: $(SERVER) $(CLIENT)
 
-$(SERVER): $(LIB_OBJS) $(SER_OBJS)
+$(SERVER): $(LIB_OBJS) $(SERVER_OBJS)
 		$(CC) $(CFLAGS) $(INCLUDE) $^ -o $@
 
-$(CLIENT): $(LIB_OBJS) $(CLI_OBJS)
+$(CLIENT): $(LIB_OBJS) $(CLIENT_OBJS)
 		$(CC) $(CFLAGS) $(INCLUDE) $^ -o $@
-
-bonus: 
-		make WITH_BONUS=1 all
 
 re: fclean all
 
 clean:
-		$(RM) $(SERVER_OBJS) $(CLIENT_OBJS) $(SERVER_BONUS_OBJS) $(CLIENT_BONUS_OBJS) $(LIB_OBJS)
+		$(RM) $(SERVER_OBJS) $(CLIENT_OBJS) $(LIB_OBJS)
 
 fclean: clean
 		$(RM) $(SERVER) $(CLIENT)
