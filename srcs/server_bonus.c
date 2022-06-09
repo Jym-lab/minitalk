@@ -1,16 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.c                                           :+:      :+:    :+:   */
+/*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yjoo <yjoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/27 14:26:45 by yjoo              #+#    #+#             */
-/*   Updated: 2022/05/27 14:26:45 by yjoo             ###   ########.fr       */
+/*   Created: 2022/06/09 13:15:07 by yjoo              #+#    #+#             */
+/*   Updated: 2022/06/09 13:15:07 by yjoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "../include/minitalk.h"
+#include "../include/minitalk_bonus.h"
 
 void	signal_error(void)
 {
@@ -30,7 +29,9 @@ void	print_msg(int *i, char *c, int *cli_pid)
 	if (*c == 0)
 	{
 		ft_putchar_fd(*c, 1);
-		ft_putchar_fd('\n', 1);
+		ft_putstr_fd("\nfrom client pid : ", 1);
+		ft_putnbr_fd(*cli_pid, 1);
+		ft_putstr_fd("\n", 1);
 		if (kill(*cli_pid, SIGUSR1) == -1)
 			signal_error();
 		return ;

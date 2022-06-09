@@ -1,20 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yjoo <yjoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/27 14:26:51 by yjoo              #+#    #+#             */
-/*   Updated: 2022/05/27 14:26:51 by yjoo             ###   ########.fr       */
+/*   Created: 2022/06/09 13:14:55 by yjoo              #+#    #+#             */
+/*   Updated: 2022/06/09 13:14:55 by yjoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "../include/minitalk_bonus.h"
 
-#include "../include/minitalk.h"
-
-void	signal_error(void)
+void	error(void)
 {
-	ft_putstr_fd("\n[client : signal transmission error]\n", 1);
+	ft_putstr_fd("\n[client : signal transmission error\n", 1);
 	exit(EXIT_FAILURE);
 }
 
@@ -28,12 +27,12 @@ void	send_bin_msg(int server_pid, unsigned char c)
 		if (c & 128)
 		{
 			if (kill(server_pid, SIGUSR2) == -1)
-				signal_error();
+				error();
 		}
 		else
 		{
 			if (kill(server_pid, SIGUSR1) == -1)
-				signal_error();
+				error();
 		}
 		c <<= 1;
 		i++;
@@ -57,7 +56,10 @@ void	receive_handler(int signo, siginfo_t *info, void *context)
 	(void)info;
 	(void)context;
 	if (signo == SIGUSR1)
+	{
+		ft_putstr_fd("\nsignal sent complete\n", 1);
 		exit(EXIT_SUCCESS);
+	}
 }
 
 int	main(int ac, char **av)
