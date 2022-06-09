@@ -17,11 +17,6 @@ RM = rm -f
 SERVER = server
 CLIENT = client
 
-LIBFT_FILES = ft_putstr_fd.c ft_putnbr_fd.c ft_putchar_fd.c ft_atoi.c
-LIB_PATH = ./libft/
-LIB_SRCS = $(addprefix $(LIB_PATH), $(LIBFT_FILES))
-LIB_OBJS = $(LIB_SRCS:.c=.o)
-
 INCLUDE = -I./include
 SRCS_PATH = ./srcs
 SERVER_FILES = server.c
@@ -43,13 +38,17 @@ else
 	CLI_OBJS = $(CLIENT_OBJS)
 endif
 
-all: $(SERVER) $(CLIENT)
+all: lib $(SERVER) $(CLIENT)
 
-$(SERVER): $(LIB_OBJS) $(SER_OBJS)
-		$(CC) $(CFLAGS) $(INCLUDE) $^ -o $@
+$(SERVER): $(SER_OBJS)
+		$(CC) $(CFLAGS) $(INCLUDE) $^ libft/libft.a -o $@
 
-$(CLIENT): $(LIB_OBJS) $(CLI_OBJS)
-		$(CC) $(CFLAGS) $(INCLUDE) $^ -o $@
+$(CLIENT): $(CLI_OBJS)
+		$(CC) $(CFLAGS) $(INCLUDE) $^ libft/libft.a -o $@
+
+lib:
+	@make -C libft all
+	@echo "libft_success"
 
 bonus: 
 		make WITH_BONUS=1 all
@@ -57,9 +56,11 @@ bonus:
 re: fclean all
 
 clean:
-		$(RM) $(SERVER_OBJS) $(CLIENT_OBJS) $(SERVER_BONUS_OBJS) $(CLIENT_BONUS_OBJS) $(LIB_OBJS)
+		$(RM) $(SERVER_OBJS) $(CLIENT_OBJS) $(SERVER_BONUS_OBJS) $(CLIENT_BONUS_OBJS)
+		@make clean -C libft
 
 fclean: clean
 		$(RM) $(SERVER) $(CLIENT)
+		rm -f libft/libft.a
 
 .PHONY: all re clean fclean
